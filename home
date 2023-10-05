@@ -1,0 +1,82 @@
+// Global variables
+const products = [
+  {
+    id: 1,
+    name: "Product 1",
+    price: 100,
+    image: "product1.jpg",
+  },
+  {
+    id: 2,
+    name: "Product 2",
+    price: 200,
+    image: "product2.jpg",
+  },
+  {
+    id: 3,
+    name: "Product 3",
+    price: 300,
+    image: "product3.jpg",
+  },
+];
+const cart = [];
+
+// Add a product to the cart
+function addToCart(productId) {
+  const product = products.find((product) => product.id === productId);
+  cart.push(product);
+}
+
+// Remove a product from the cart
+function removeFromCart(productId) {
+  const productIndex = cart.findIndex((product) => product.id === productId);
+  cart.splice(productIndex, 1);
+}
+
+// Update the total price of the cart
+function updateTotalPrice() {
+  let totalPrice = 0;
+  cart.forEach((product) => {
+    totalPrice += product.price;
+  });
+  document.querySelector(".total-price").textContent = totalPrice;
+}
+
+// Display the cart contents
+function displayCart() {
+  const cartContainer = document.querySelector(".cart-container");
+  cartContainer.innerHTML = "";
+
+  cart.forEach((product) => {
+    const cartItem = document.createElement("div");
+    cartItem.classList.add("cart-item");
+
+    const productImage = document.createElement("img");
+    productImage.src = product.image;
+    cartItem.appendChild(productImage);
+
+    const productName = document.createElement("span");
+    productName.textContent = product.name;
+    cartItem.appendChild(productName);
+
+    const productPrice = document.createElement("span");
+    productPrice.textContent = `$${product.price}`;
+    cartItem.appendChild(productPrice);
+
+    const removeButton = document.createElement("button");
+    removeButton.textContent = "Remove";
+    removeButton.addEventListener("click", () => {
+      removeFromCart(product.id);
+      updateTotalPrice();
+      displayCart();
+    });
+    cartItem.appendChild(removeButton);
+
+    cartContainer.appendChild(cartItem);
+  });
+}
+
+// Initialize the page
+window.addEventListener("load", () => {
+  displayCart();
+});
